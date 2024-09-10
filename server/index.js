@@ -36,11 +36,10 @@ app.use(cookieParser());
 
 // DB Config for hosting
 const db = new Client({
-    host: process.env.PGHOST,
-    port: process.env.PGPORT,
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    database: process.env.PGDATABASE
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 // Connect to the database
@@ -157,7 +156,9 @@ app.post('/logout', (req, res) => {
   });
   
 
-// Start the server
-app.listen(8081, () => {
-    console.log("Server running on port 8081...");
+// Use PORT from environment variables or fallback to 8081
+const port = process.env.PORT || 8081;
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}...`);
 });
